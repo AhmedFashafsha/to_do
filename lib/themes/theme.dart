@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 ThemeData themeData = ThemeData(
   colorScheme: const ColorScheme(
     brightness: Brightness.dark,
-    primary: Color(0xFFAC88E8),
+    primary: Color.fromARGB(255, 154, 136, 232),
     onPrimary: Colors.white,
-    secondary: Color(0xff9667E0),
+    secondary: Color.fromARGB(255, 125, 103, 224),
     onSecondary: Colors.white,
     error: Colors.red,
     onError: Colors.white,

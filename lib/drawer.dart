@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/main.dart';
 import 'package:to_do/themes/theme.dart';
 
 Drawer buildDrawer(BuildContext context) {
