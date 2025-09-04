@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:to_do/components.dart';
 
 class FilterRow extends StatefulWidget {
-  const FilterRow({super.key});
+  final Function(Set<String>) onFilterChanged;
+
+  const FilterRow({super.key, required this.onFilterChanged});
 
   @override
   _FilterRowState createState() => _FilterRowState();
@@ -32,6 +34,9 @@ class _FilterRowState extends State<FilterRow> {
           selectedFilters = {'All'};
         }
       }
+
+      // Notify parent widget about filter changes
+      widget.onFilterChanged(selectedFilters);
     });
   }
 
@@ -48,29 +53,16 @@ class _FilterRowState extends State<FilterRow> {
             onSelected: (selected) => _handleFilterTap('All'),
           ),
           SizedBox(width: 10),
-          buildFilterChip(
-            label: 'Home',
-            selected: selectedFilters.contains('Home'),
-            onSelected: (selected) => _handleFilterTap('Home'),
-          ),
-          SizedBox(width: 10),
-          buildFilterChip(
-            label: 'Work',
-            selected: selectedFilters.contains('Work'),
-            onSelected: (selected) => _handleFilterTap('Work'),
-          ),
-          SizedBox(width: 10),
-          buildFilterChip(
-            label: 'School',
-            selected: selectedFilters.contains('School'),
-            onSelected: (selected) => _handleFilterTap('School'),
-          ),
-          SizedBox(width: 10),
-          buildFilterChip(
-            label: 'Completed',
-            selected: selectedFilters.contains('Completed'),
-            onSelected: (selected) => _handleFilterTap('Completed'),
-          ),
+          ...availableCategories.map((category) {
+            return Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: buildFilterChip(
+                label: category,
+                selected: selectedFilters.contains(category),
+                onSelected: (selected) => _handleFilterTap(category),
+              ),
+            );
+          }),
         ],
       ),
     );

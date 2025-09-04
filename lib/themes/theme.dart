@@ -19,7 +19,7 @@ ThemeData themeData = ThemeData(
   scaffoldBackgroundColor: Color(0xff1E1E1E),
 
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xff1E1E1E),
+    backgroundColor: Color.fromARGB(255, 23, 23, 23),
     foregroundColor: Colors.white,
   ),
   dividerTheme: DividerThemeData(color: Color(0xff464646)),

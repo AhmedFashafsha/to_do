@@ -1,11 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:to_do/task_dialog.dart';
 import 'package:to_do/themes/theme.dart';
 
-FloatingActionButton buildFloatingActionButton(ThemeData themeData) {
+// Global categories list that can be modified
+List<String> availableCategories = [
+  'No Category',
+  'Work',
+  'Home',
+  'School',
+  'Personal',
+  'Shopping',
+];
+
+void addNewCategory(String category) {
+  if (!availableCategories.contains(category) && category.isNotEmpty) {
+    availableCategories.add(category);
+  }
+}
+
+FloatingActionButton buildFloatingActionButton(BuildContext context) {
   return FloatingActionButton(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-    onPressed: () {},
+    onPressed: () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TaskDialog(
+            onTaskCreated: (Task newTask) {
+              // This will be handled in the parent widget
+            },
+          );
+        },
+      );
+    },
     backgroundColor: themeData.colorScheme.secondary,
     child: Icon(Icons.add, color: themeData.colorScheme.onPrimary),
   );
@@ -40,34 +68,76 @@ FilterChip buildFilterChip({
 class Task {
   final String title;
   final String description;
+  final String category;
   bool isCompleted;
 
   Task({
     required this.title,
     required this.description,
+    this.category = 'No Category',
     this.isCompleted = false,
   });
 }
 
 List<Task> taskList = [
-  Task(title: 'Task 1 ', description: 'Description for Task 1'),
-  Task(title: 'Task 2', description: 'Description for Task 2'),
-  Task(title: 'Task 3', description: 'Description for Task 3'),
+  Task(
+    title: 'Complete project presentation',
+    description: 'Prepare slides and practice presentation for Monday meeting',
+    category: 'Work',
+  ),
+  Task(
+    title: 'Buy groceries',
+    description: 'Milk, bread, eggs, and vegetables for the week',
+    category: 'Shopping',
+  ),
+  Task(
+    title: 'Study for exam',
+    description: 'Review chapters 5-8 for tomorrow\'s mathematics exam',
+    category: 'School',
+  ),
 ];
 
 class TaskList extends StatefulWidget {
-  const TaskList({super.key});
+  final Function(Task) onAddTask;
+  final Set<String> selectedFilters;
+
+  const TaskList({
+    super.key,
+    required this.onAddTask,
+    required this.selectedFilters,
+  });
 
   @override
   _TaskListState createState() => _TaskListState();
 }
 
 class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
-  // Separate tasks into active and completed
-  List<Task> get activeTasks =>
-      taskList.where((task) => !task.isCompleted).toList();
-  List<Task> get completedTasks =>
-      taskList.where((task) => task.isCompleted).toList();
+  // Filter tasks based on selected filters and completion status
+  List<Task> get activeTasks {
+    final filtered = widget.selectedFilters.contains('All')
+        ? taskList.where((task) => !task.isCompleted).toList()
+        : taskList
+              .where(
+                (task) =>
+                    !task.isCompleted &&
+                    widget.selectedFilters.contains(task.category),
+              )
+              .toList();
+    return filtered;
+  }
+
+  List<Task> get completedTasks {
+    final filtered = widget.selectedFilters.contains('All')
+        ? taskList.where((task) => task.isCompleted).toList()
+        : taskList
+              .where(
+                (task) =>
+                    task.isCompleted &&
+                    widget.selectedFilters.contains(task.category),
+              )
+              .toList();
+    return filtered;
+  }
 
   @override
   Widget build(BuildContext context) {

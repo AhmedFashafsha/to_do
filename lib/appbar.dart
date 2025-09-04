@@ -4,6 +4,7 @@ import 'package:to_do/themes/theme.dart';
 
 AppBar buildAppBar(BuildContext context) {
   return AppBar(
+    backgroundColor: themeData.appBarTheme.backgroundColor,
     centerTitle: true,
 
     title: SafeArea(
