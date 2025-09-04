@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:to_do/appbar.dart';
 import 'package:to_do/components.dart';
+import 'package:to_do/drawer.dart';
 import 'package:to_do/filter_row.dart';
 import 'package:to_do/task_dialog.dart';
-import 'package:to_do/themes/theme.dart';
+import 'package:to_do/theme_manager.dart';
 
 class Tasks extends StatefulWidget {
   const Tasks({super.key});
@@ -29,6 +31,8 @@ class _TasksState extends State<Tasks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(context: context, title: 'Tasks'),
+      drawer: buildDrawer(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -53,8 +57,11 @@ class _TasksState extends State<Tasks> {
             },
           );
         },
-        backgroundColor: themeData.colorScheme.secondary,
-        child: Icon(Icons.add, color: themeData.colorScheme.onPrimary),
+        backgroundColor: ThemeManager().themeData.colorScheme.secondary,
+        child: Icon(
+          Icons.add,
+          color: ThemeManager().themeData.colorScheme.onPrimary,
+        ),
       ),
     );
   }

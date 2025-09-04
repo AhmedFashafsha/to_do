@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/task_dialog.dart';
-import 'package:to_do/themes/theme.dart';
+import 'package:to_do/theme_manager.dart';
 
 // Global categories list that can be modified
 List<String> availableCategories = [
@@ -34,8 +34,11 @@ FloatingActionButton buildFloatingActionButton(BuildContext context) {
         },
       );
     },
-    backgroundColor: themeData.colorScheme.secondary,
-    child: Icon(Icons.add, color: themeData.colorScheme.onPrimary),
+    backgroundColor: ThemeManager().themeData.colorScheme.secondary,
+    child: Icon(
+      Icons.add,
+      color: ThemeManager().themeData.colorScheme.onPrimary,
+    ),
   );
 }
 
@@ -47,17 +50,17 @@ FilterChip buildFilterChip({
   return FilterChip(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
     backgroundColor: selected
-        ? themeData.colorScheme.primary
-        : themeData.colorScheme.secondary,
-    selectedColor: themeData.colorScheme.primary,
+        ? ThemeManager().themeData.colorScheme.primary
+        : ThemeManager().themeData.colorScheme.secondary,
+    selectedColor: ThemeManager().themeData.colorScheme.primary,
     label: Text(
       label,
       style: GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.bold,
         color: selected
-            ? themeData.colorScheme.onPrimary
-            : themeData.colorScheme.onSecondary,
+            ? ThemeManager().themeData.colorScheme.onPrimary
+            : ThemeManager().themeData.colorScheme.onSecondary,
       ),
     ),
     selected: selected,
@@ -173,16 +176,17 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
             content: Text(
               'Task deleted',
               style: GoogleFonts.inter(
-                color: themeData.colorScheme.onPrimary,
+                color: ThemeManager().themeData.colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            backgroundColor: themeData
+            backgroundColor: ThemeManager()
+                .themeData
                 .colorScheme
                 .primaryContainer, // Darker tone for SnackBar
             action: SnackBarAction(
               label: 'Undo',
-              textColor: themeData.colorScheme.onPrimary,
+              textColor: ThemeManager().themeData.colorScheme.onPrimary,
               onPressed: () {
                 setState(() {
                   taskList.add(removedTask);
@@ -193,14 +197,14 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
         );
       },
       background: Container(
-        color: themeData.colorScheme.error.withValues(
+        color: ThemeManager().themeData.colorScheme.error.withValues(
           alpha: 0.9,
         ), // Darker delete background
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 20),
         child: Icon(
           Icons.delete,
-          color: themeData.colorScheme.onError.withValues(
+          color: ThemeManager().themeData.colorScheme.onError.withValues(
             alpha: 0.9,
           ), // Darker delete icon
         ),
@@ -222,12 +226,13 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
               duration: Duration(milliseconds: 700),
               curve: Curves.bounceOut,
               decoration: BoxDecoration(
-                color: themeData.colorScheme.primary,
+                color: ThemeManager().themeData.colorScheme.primary,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: task.isCompleted
                     ? [
                         BoxShadow(
-                          color: themeData.colorScheme.shadow.withOpacity(0.3),
+                          color: ThemeManager().themeData.colorScheme.shadow
+                              .withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: Offset(0, 4),
                         ),
@@ -251,7 +256,9 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
           style: GoogleFonts.inter(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: themeData.colorScheme.onSurface.withValues(alpha: 0.7),
+            color: ThemeManager().themeData.colorScheme.onSurface.withValues(
+              alpha: 0.7,
+            ),
           ),
         ),
         Divider(),
@@ -274,11 +281,11 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
             shape: CircleBorder(),
             fillColor: WidgetStateProperty.resolveWith<Color>((states) {
               if (states.contains(WidgetState.selected)) {
-                return themeData.colorScheme.secondary;
+                return ThemeManager().themeData.colorScheme.secondary;
               }
               return Colors.transparent;
             }),
-            checkColor: themeData.colorScheme.onSecondary,
+            checkColor: ThemeManager().themeData.colorScheme.onSecondary,
           ),
         ),
         Expanded(
@@ -288,11 +295,11 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
               style: GoogleFonts.inter(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: themeData.colorScheme.onPrimary,
+                color: ThemeManager().themeData.colorScheme.onPrimary,
                 decoration: task.isCompleted
                     ? TextDecoration.lineThrough
                     : TextDecoration.none,
-                decorationColor: themeData.colorScheme.onPrimary,
+                decorationColor: ThemeManager().themeData.colorScheme.onPrimary,
                 decorationThickness: 2.0,
               ),
             ),
@@ -301,13 +308,13 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
               style: GoogleFonts.inter(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: themeData.colorScheme.onPrimary.withValues(alpha: .8),
+                color: ThemeManager().themeData.colorScheme.onPrimary
+                    .withValues(alpha: .8),
                 decoration: task.isCompleted
                     ? TextDecoration.lineThrough
                     : TextDecoration.none,
-                decorationColor: themeData.colorScheme.onPrimary.withValues(
-                  alpha: 0.8,
-                ),
+                decorationColor: ThemeManager().themeData.colorScheme.onPrimary
+                    .withValues(alpha: 0.8),
               ),
             ),
             onTap: () {

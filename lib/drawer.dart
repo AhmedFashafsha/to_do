@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/themes/theme.dart';
+import 'package:to_do/pages/settings.dart';
+import 'package:to_do/pages/tasks.dart';
+import 'package:to_do/theme_manager.dart';
 
 Drawer buildDrawer(BuildContext context) {
   return Drawer(
-    backgroundColor: themeData.scaffoldBackgroundColor,
+    backgroundColor: ThemeManager().themeData.scaffoldBackgroundColor,
     child: ListView(
       padding: EdgeInsets.zero,
       children: [
@@ -22,12 +24,24 @@ Drawer buildDrawer(BuildContext context) {
           ),
         ),
         Divider(),
-        ListTile(leading: Icon(Icons.home), title: Text('Home'), onTap: () {}),
-        ListTile(leading: Icon(Icons.task), title: Text('Tasks'), onTap: () {}),
+
+        ListTile(
+          leading: Icon(Icons.task),
+          title: Text('Tasks'),
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const Tasks()));
+          },
+        ),
         ListTile(
           leading: Icon(Icons.settings),
           title: Text('Settings'),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => const Settings()));
+          },
         ),
       ],
     ),
