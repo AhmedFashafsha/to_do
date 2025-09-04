@@ -159,36 +159,83 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
   }
 
   Widget _buildAnimatedTaskItem(Task task) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 600),
-      curve: Curves.easeInOutBack,
-      margin: EdgeInsets.only(bottom: 12),
-      transform: Matrix4.identity()
-        ..translate(0.0, task.isCompleted ? 10.0 : 0.0, 0.0),
-      child: AnimatedOpacity(
-        opacity: task.isCompleted ? 0.7 : 1.0,
-        duration: Duration(milliseconds: 500),
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.easeOut,
-          transform: Matrix4.identity()..scale(task.isCompleted ? 0.96 : 1.0),
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 700),
-            curve: Curves.bounceOut,
-            decoration: BoxDecoration(
-              color: themeData.colorScheme.primary,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: task.isCompleted
-                  ? [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ]
-                  : [],
+    return Dismissible(
+      key: ValueKey(task.title),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        final removedTask = task;
+        setState(() {
+          taskList.remove(task);
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Task deleted',
+              style: GoogleFonts.inter(
+                color: themeData.colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            child: _buildTaskItem(task),
+            backgroundColor: themeData
+                .colorScheme
+                .primaryContainer, // Darker tone for SnackBar
+            action: SnackBarAction(
+              label: 'Undo',
+              textColor: themeData.colorScheme.onPrimary,
+              onPressed: () {
+                setState(() {
+                  taskList.add(removedTask);
+                });
+              },
+            ),
+          ),
+        );
+      },
+      background: Container(
+        color: themeData.colorScheme.error.withValues(
+          alpha: 0.9,
+        ), // Darker delete background
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 20),
+        child: Icon(
+          Icons.delete,
+          color: themeData.colorScheme.onError.withValues(
+            alpha: 0.9,
+          ), // Darker delete icon
+        ),
+      ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 600),
+        curve: Curves.easeInOutBack,
+        margin: EdgeInsets.only(bottom: 12),
+        transform: Matrix4.identity()
+          ..translate(0.0, task.isCompleted ? 10.0 : 0.0, 0.0),
+        child: AnimatedOpacity(
+          opacity: task.isCompleted ? 0.7 : 1.0,
+          duration: Duration(milliseconds: 500),
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.easeOut,
+            transform: Matrix4.identity()..scale(task.isCompleted ? 0.96 : 1.0),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 700),
+              curve: Curves.bounceOut,
+              decoration: BoxDecoration(
+                color: themeData.colorScheme.primary,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: task.isCompleted
+                    ? [
+                        BoxShadow(
+                          color: themeData.colorScheme.shadow.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: _buildTaskItem(task),
+            ),
           ),
         ),
       ),

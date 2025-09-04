@@ -51,6 +51,7 @@ class _TaskDialogState extends State<TaskDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      alignment: Alignment.center,
       backgroundColor: themeData.scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: SingleChildScrollView(
@@ -60,17 +61,6 @@ class _TaskDialogState extends State<TaskDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Dialog Header
-              Text(
-                'Create New Task',
-                style: GoogleFonts.inter(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: themeData.colorScheme.onSurface,
-                ),
-              ),
-              SizedBox(height: 20),
-
               // Task Title Input
               Text(
                 'Title',
@@ -281,35 +271,22 @@ class _TaskDialogState extends State<TaskDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Cancel',
-                      style: GoogleFonts.inter(
-                        color: themeData.colorScheme.onSurface.withValues(
-                          alpha: 0.7,
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(width: 12),
-                  ElevatedButton(
+                  IconButton(
                     onPressed: _createTask,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: themeData.colorScheme.primary,
                       foregroundColor: themeData.colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       padding: EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
                       ),
                     ),
-                    child: Text(
-                      'Create Task',
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                    ),
+
+                    icon: Icon(Icons.send),
                   ),
                 ],
               ),
