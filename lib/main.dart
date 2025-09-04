@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do/appbar.dart';
 import 'package:to_do/components.dart';
 import 'package:to_do/drawer.dart';
+import 'package:to_do/filter_row.dart';
 import 'package:to_do/themes/theme.dart';
 
 void main() {
@@ -21,15 +22,23 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: themeData,
       home: Scaffold(
-        backgroundColor: themeData
-            .scaffoldBackgroundColor, 
+        backgroundColor: themeData.scaffoldBackgroundColor,
         appBar: buildAppBar(context),
         drawer: buildDrawer(context),
 
-        body: Column(children: [
-          buildFilterRow(),
-          buildFloatingActionButton(themeData),
-        ]),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              FilterRow(),
+              Expanded(child: TaskList()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [buildFloatingActionButton(themeData)],
+              ),
+            ],
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
     );
