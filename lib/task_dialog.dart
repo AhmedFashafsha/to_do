@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/components.dart';
-import 'package:to_do/themes/theme.dart';
+import 'package:to_do/theme_manager.dart';
 
 class TaskDialog extends StatefulWidget {
   final Function(Task) onTaskCreated;
@@ -32,7 +32,7 @@ class _TaskDialogState extends State<TaskDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please enter a task title'),
-          backgroundColor: themeData.colorScheme.error,
+          backgroundColor: ThemeManager().themeData.colorScheme.error,
         ),
       );
       return;
@@ -51,7 +51,8 @@ class _TaskDialogState extends State<TaskDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: themeData.scaffoldBackgroundColor,
+      alignment: Alignment.center,
+      backgroundColor: ThemeManager().themeData.scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: SingleChildScrollView(
         child: Container(
@@ -60,24 +61,13 @@ class _TaskDialogState extends State<TaskDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Dialog Header
-              Text(
-                'Create New Task',
-                style: GoogleFonts.inter(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: themeData.colorScheme.onSurface,
-                ),
-              ),
-              SizedBox(height: 20),
-
               // Task Title Input
               Text(
                 'Title',
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: themeData.colorScheme.onSurface,
+                  color: ThemeManager().themeData.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 8),
@@ -86,18 +76,17 @@ class _TaskDialogState extends State<TaskDialog> {
                 decoration: InputDecoration(
                   hintText: 'Buy groceries...',
                   hintStyle: GoogleFonts.inter(
-                    color: themeData.colorScheme.onSurface.withValues(
-                      alpha: 0.6,
-                    ),
+                    color: ThemeManager().themeData.colorScheme.onSurface
+                        .withValues(alpha: 0.6),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
-                  fillColor: themeData.colorScheme.surface,
+                  fillColor: ThemeManager().themeData.colorScheme.surface,
                 ),
                 style: GoogleFonts.inter(
-                  color: themeData.colorScheme.onSurface,
+                  color: ThemeManager().themeData.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 16),
@@ -108,7 +97,7 @@ class _TaskDialogState extends State<TaskDialog> {
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: themeData.colorScheme.onSurface,
+                  color: ThemeManager().themeData.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 8),
@@ -118,18 +107,17 @@ class _TaskDialogState extends State<TaskDialog> {
                 decoration: InputDecoration(
                   hintText: 'Buy milk, eggs, and bread...',
                   hintStyle: GoogleFonts.inter(
-                    color: themeData.colorScheme.onSurface.withValues(
-                      alpha: 0.6,
-                    ),
+                    color: ThemeManager().themeData.colorScheme.onSurface
+                        .withValues(alpha: 0.6),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   filled: true,
-                  fillColor: themeData.colorScheme.surface,
+                  fillColor: ThemeManager().themeData.colorScheme.surface,
                 ),
                 style: GoogleFonts.inter(
-                  color: themeData.colorScheme.onSurface,
+                  color: ThemeManager().themeData.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 16),
@@ -140,16 +128,18 @@ class _TaskDialogState extends State<TaskDialog> {
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: themeData.colorScheme.onSurface,
+                  color: ThemeManager().themeData.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 8),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  border: Border.all(color: themeData.colorScheme.outline),
+                  border: Border.all(
+                    color: ThemeManager().themeData.colorScheme.outline,
+                  ),
                   borderRadius: BorderRadius.circular(12),
-                  color: themeData.colorScheme.surface,
+                  color: ThemeManager().themeData.colorScheme.surface,
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
@@ -166,7 +156,7 @@ class _TaskDialogState extends State<TaskDialog> {
                       });
                     },
                     style: GoogleFonts.inter(
-                      color: themeData.colorScheme.onSurface,
+                      color: ThemeManager().themeData.colorScheme.onSurface,
                     ),
                     items: [
                       ...availableCategories.map<DropdownMenuItem<String>>((
@@ -183,7 +173,7 @@ class _TaskDialogState extends State<TaskDialog> {
                           'Create New Category',
                           style: GoogleFonts.inter(
                             fontStyle: FontStyle.italic,
-                            color: themeData.colorScheme.primary,
+                            color: ThemeManager().themeData.colorScheme.primary,
                           ),
                         ),
                       ),
@@ -200,7 +190,7 @@ class _TaskDialogState extends State<TaskDialog> {
                   style: GoogleFonts.inter(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: themeData.colorScheme.onSurface,
+                    color: ThemeManager().themeData.colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -209,25 +199,26 @@ class _TaskDialogState extends State<TaskDialog> {
                   decoration: InputDecoration(
                     hintText: 'Enter category name',
                     hintStyle: GoogleFonts.inter(
-                      color: themeData.colorScheme.onSurface.withOpacity(0.6),
+                      color: ThemeManager().themeData.colorScheme.onSurface
+                          .withValues(alpha: 0.6),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: themeData.colorScheme.outline,
+                        color: ThemeManager().themeData.colorScheme.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: themeData.colorScheme.primary,
+                        color: ThemeManager().themeData.colorScheme.primary,
                       ),
                     ),
                     filled: true,
-                    fillColor: themeData.colorScheme.surface,
+                    fillColor: ThemeManager().themeData.colorScheme.surface,
                   ),
                   style: GoogleFonts.inter(
-                    color: themeData.colorScheme.onSurface,
+                    color: ThemeManager().themeData.colorScheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -243,9 +234,8 @@ class _TaskDialogState extends State<TaskDialog> {
                       child: Text(
                         'Cancel',
                         style: GoogleFonts.inter(
-                          color: themeData.colorScheme.onSurface.withOpacity(
-                            0.7,
-                          ),
+                          color: ThemeManager().themeData.colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                         ),
                       ),
                     ),
@@ -263,8 +253,10 @@ class _TaskDialogState extends State<TaskDialog> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: themeData.colorScheme.primary,
-                        foregroundColor: themeData.colorScheme.onPrimary,
+                        backgroundColor:
+                            ThemeManager().themeData.colorScheme.primary,
+                        foregroundColor:
+                            ThemeManager().themeData.colorScheme.onPrimary,
                       ),
                       child: Text(
                         'Add Category',
@@ -281,35 +273,24 @@ class _TaskDialogState extends State<TaskDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Cancel',
-                      style: GoogleFonts.inter(
-                        color: themeData.colorScheme.onSurface.withValues(
-                          alpha: 0.7,
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(width: 12),
-                  ElevatedButton(
+                  IconButton(
                     onPressed: _createTask,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: themeData.colorScheme.primary,
-                      foregroundColor: themeData.colorScheme.onPrimary,
+                      backgroundColor:
+                          ThemeManager().themeData.colorScheme.primary,
+                      foregroundColor:
+                          ThemeManager().themeData.colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       padding: EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
                       ),
                     ),
-                    child: Text(
-                      'Create Task',
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                    ),
+
+                    icon: Icon(Icons.send),
                   ),
                 ],
               ),
