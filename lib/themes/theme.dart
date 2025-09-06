@@ -95,37 +95,12 @@ ThemeData redTheme = ThemeData(
   drawerTheme: const DrawerThemeData(scrimColor: Colors.black54),
 );
 
-// White Theme (only cards are white, app stays dark)
-ThemeData whiteTheme = ThemeData(
-  colorScheme: const ColorScheme(
-    brightness: Brightness.dark,
-    primary: Colors.white,
-    onPrimary: Color.fromARGB(255, 60, 60, 60),
-    secondary: Color.fromARGB(255, 120, 120, 120),
-    onSecondary: Colors.white,
-    error: Colors.red,
-    onError: Colors.white,
-    surface: Color.fromARGB(255, 39, 39, 39),
-    onSurface: Colors.white,
-    inversePrimary: Color.fromARGB(255, 240, 240, 240),
-  ),
-  useMaterial3: true,
-  scaffoldBackgroundColor: Color(0xff1E1E1E),
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromARGB(255, 23, 23, 23),
-    foregroundColor: Colors.white,
-  ),
-  dividerTheme: DividerThemeData(color: Color(0xff464646)),
-  drawerTheme: const DrawerThemeData(scrimColor: Colors.black54),
-);
-
 // Theme map for easy access
 Map<String, ThemeData> appThemes = {
   'Default': defaultTheme,
   'Blue': blueTheme,
   'Green': greenTheme,
   'Red': redTheme,
-  'White': whiteTheme,
 };
 
 // Current theme data - defaults to purple theme

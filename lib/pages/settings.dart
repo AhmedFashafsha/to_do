@@ -19,7 +19,6 @@ class _SettingsState extends State<Settings> {
     'Blue': Color.fromARGB(255, 66, 133, 244),
     'Green': Color.fromARGB(255, 76, 175, 80),
     'Red': Color.fromARGB(255, 244, 66, 66),
-    'White': Color.fromARGB(255, 100, 100, 100),
   };
 
   @override
