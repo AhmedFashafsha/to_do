@@ -5,6 +5,7 @@ import 'package:to_do/drawer.dart';
 import 'package:to_do/filter_row.dart';
 import 'package:to_do/task_dialog.dart';
 import 'package:to_do/theme_manager.dart';
+import 'package:to_do/task_manager.dart';
 
 class Tasks extends StatefulWidget {
   const Tasks({super.key});
@@ -17,9 +18,7 @@ class _TasksState extends State<Tasks> {
   Set<String> selectedFilters = {'All'};
 
   void _addNewTask(Task newTask) {
-    setState(() {
-      taskList.add(newTask);
-    });
+    TaskManager().addTask(newTask);
   }
 
   void _onFilterChanged(Set<String> filters) {
@@ -30,39 +29,46 @@ class _TasksState extends State<Tasks> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context: context, title: 'Tasks'),
-      drawer: buildDrawer(context),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            FilterRow(onFilterChanged: _onFilterChanged),
-            Expanded(
-              child: TaskList(
-                onAddTask: _addNewTask,
-                selectedFilters: selectedFilters,
-              ),
+    return AnimatedBuilder(
+      animation: ThemeManager(),
+      builder: (context, child) {
+        return Scaffold(
+          appBar: buildAppBar(context: context, title: 'Tasks'),
+          drawer: buildDrawer(context),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                FilterRow(onFilterChanged: _onFilterChanged),
+                Expanded(
+                  child: TaskList(
+                    onAddTask: _addNewTask,
+                    selectedFilters: selectedFilters,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return TaskDialog(onTaskCreated: _addNewTask);
+          ),
+          floatingActionButton: FloatingActionButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return TaskDialog(onTaskCreated: _addNewTask);
+                },
+              );
             },
-          );
-        },
-        backgroundColor: ThemeManager().themeData.colorScheme.secondary,
-        child: Icon(
-          Icons.add,
-          color: ThemeManager().themeData.colorScheme.onPrimary,
-        ),
-      ),
+            backgroundColor: ThemeManager().themeData.colorScheme.secondary,
+            child: Icon(
+              Icons.add,
+              color: ThemeManager().themeData.colorScheme.onPrimary,
+            ),
+          ),
+        );
+      },
     );
   }
 }

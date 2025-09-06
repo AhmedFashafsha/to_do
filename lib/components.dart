@@ -2,21 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do/task_dialog.dart';
 import 'package:to_do/theme_manager.dart';
+import 'package:to_do/task_manager.dart';
 
-// Global categories list that can be modified
-List<String> availableCategories = [
-  'No Category',
-  'Work',
-  'Home',
-  'School',
-  'Personal',
-  'Shopping',
-];
+// Global categories access through TaskManager
+List<String> get availableCategories => TaskManager().categories;
 
 void addNewCategory(String category) {
-  if (!availableCategories.contains(category) && category.isNotEmpty) {
-    availableCategories.add(category);
-  }
+  TaskManager().addCategory(category);
 }
 
 FloatingActionButton buildFloatingActionButton(BuildContext context) {
@@ -82,23 +74,8 @@ class Task {
   });
 }
 
-List<Task> taskList = [
-  Task(
-    title: 'Complete project presentation',
-    description: 'Prepare slides and practice presentation for Monday meeting',
-    category: 'Work',
-  ),
-  Task(
-    title: 'Buy groceries',
-    description: 'Milk, bread, eggs, and vegetables for the week',
-    category: 'Shopping',
-  ),
-  Task(
-    title: 'Study for exam',
-    description: 'Review chapters 5-8 for tomorrow\'s mathematics exam',
-    category: 'School',
-  ),
-];
+// Global taskList getter that uses TaskManager for backward compatibility
+List<Task> get taskList => TaskManager().taskList;
 
 class TaskList extends StatefulWidget {
   final Function(Task) onAddTask;
@@ -144,20 +121,30 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.all(16),
-      children: [
-        // Active Tasks Section
-        ...activeTasks.map((task) => _buildAnimatedTaskItem(task)),
+    return AnimatedBuilder(
+      animation: TaskManager(),
+      builder: (context, child) {
+        // Show loading indicator if TaskManager is not initialized
+        if (!TaskManager().isInitialized) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-        // Completed Section (only show if there are completed tasks)
-        if (completedTasks.isNotEmpty) ...[
-          SizedBox(height: 20),
-          _buildSectionHeader('Completed'),
-          SizedBox(height: 10),
-          ...completedTasks.map((task) => _buildAnimatedTaskItem(task)),
-        ],
-      ],
+        return ListView(
+          padding: EdgeInsets.all(16),
+          children: [
+            // Active Tasks Section
+            ...activeTasks.map((task) => _buildAnimatedTaskItem(task)),
+
+            // Completed Section (only show if there are completed tasks)
+            if (completedTasks.isNotEmpty) ...[
+              SizedBox(height: 20),
+              _buildSectionHeader('Completed'),
+              SizedBox(height: 10),
+              ...completedTasks.map((task) => _buildAnimatedTaskItem(task)),
+            ],
+          ],
+        );
+      },
     );
   }
 
@@ -167,9 +154,7 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         final removedTask = task;
-        setState(() {
-          taskList.remove(task);
-        });
+        TaskManager().removeTask(task);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -188,9 +173,7 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
               label: 'Undo',
               textColor: ThemeManager().themeData.colorScheme.onPrimary,
               onPressed: () {
-                setState(() {
-                  taskList.add(removedTask);
-                });
+                TaskManager().addTask(removedTask);
               },
             ),
           ),
@@ -274,9 +257,7 @@ class _TaskListState extends State<TaskList> with TickerProviderStateMixin {
           child: Checkbox(
             value: task.isCompleted,
             onChanged: (value) {
-              setState(() {
-                task.isCompleted = value ?? false;
-              });
+              TaskManager().toggleTaskCompletion(task);
             },
             shape: CircleBorder(),
             fillColor: WidgetStateProperty.resolveWith<Color>((states) {
